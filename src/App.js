@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react"; //import useState
 import "./App.css";
 import BottomRow from "./BottomRow";
-import Sound from "react-sound";
 import soundFile from "./assets/air-horn-club-sample_1.mp3";
 
 function App() {
@@ -19,8 +18,10 @@ function App() {
   const [quarter, setQuarter] = useState(1);
 
   //timer
-  const [time, setTimer] = useState(30);
+  const gameTime = 30;
+  const [time, setTimer] = useState(gameTime);
   const [timeOn, setTimeOn] = useState(false);
+  const [playedSound, setPlayedSound] = useState(false);
 
   const [playSound, setPlaySound] = useState(0);
 
@@ -42,11 +43,20 @@ function App() {
       }, 1000);
     } else if (!timeOn && time !== 0) {
       clearInterval(interval);
+    } else if (time === 0) {
+      if (!playedSound) {
+        setPlayedSound(true);
+        setPlaySound(!playSound);
+        toggle();
+        setTimeout(() => {
+          setTimer(gameTime);
+        }, 1000);
+      }
     }
     return () => {
       clearInterval(interval);
     };
-  }, [timeOn, time, playSound]);
+  }, [timeOn, time]);
 
   return (
     <div className='container'>
