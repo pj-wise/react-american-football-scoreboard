@@ -2,24 +2,27 @@
 import React, { useState, useEffect } from "react"; //import useState
 import "./App.css";
 import BottomRow from "./BottomRow";
+import Sound from "react-sound";
+import soundFile from "./assets/air-horn-club-sample_1.mp3";
 
 function App() {
   //TODO: STEP 2 - Establish your applictaion's state with some useState hooks.  You'll need one for the home score and another for the away score.
 
   //home
-  const [homeTeam, setHome] = useState("Lions");
+  const [homeTeam, setHome] = useState("Raiders");
   const [homeScore, setHomeScore] = useState(0);
   //away
-  const [awayTeam, setAway] = useState("Tigers");
+  const [awayTeam, setAway] = useState("Bears");
   const [awayScore, setAwayScore] = useState(0);
 
   //quarter
   const [quarter, setQuarter] = useState(1);
 
   //timer
-  // function Timer() {
-  //   const [time, setTimer] = useState("30:00");
-  // }
+  const [time, setTimer] = useState(30);
+  const [timeOn, setTimeOn] = useState(false);
+
+  const [playSound, setPlaySound] = useState(0);
 
   const quarterFunc = () => {
     if (quarter < 4) {
@@ -27,9 +30,28 @@ function App() {
     } else setQuarter(1);
   };
 
+  const toggle = () => {
+    setTimeOn(!timeOn);
+  };
+
+  useEffect(() => {
+    let interval = null;
+    if (timeOn && time >= 1) {
+      interval = setInterval(() => {
+        setTimer(seconds => seconds - 1);
+      }, 1000);
+    } else if (!timeOn && time !== 0) {
+      clearInterval(interval);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timeOn, time, playSound]);
+
   return (
     <div className='container'>
       <section className='scoreboard'>
+        <h2 className='time_name'>Time</h2>
         <div className='topRow'>
           <div className='home'>
             <h2 className='home__name'>{homeTeam}</h2>
@@ -38,7 +60,14 @@ function App() {
 
             <div className='home__score'>{homeScore}</div>
           </div>
-          {/* <div className='timer'>{time}</div> */}
+
+          <div className='time'>
+            <div className='timer'>{time}</div>
+            {/* <div className='timer'>{time}</div>
+            <div className='timer'>{time}</div>
+            <div className='timer'>{time}</div> */}
+          </div>
+
           <div className='away'>
             <h2 className='away__name'>{awayTeam}</h2>
             <div className='away__score'>{awayScore}</div>
@@ -80,7 +109,16 @@ function App() {
         <button className='quarter-btn' onClick={() => quarterFunc()}>
           Change Quarter
         </button>
+        <button className='quarter-btn' onClick={toggle}>
+          {!timeOn ? "Start Timer" : "Stop Timer"}
+        </button>
       </section>
+      <div>
+        <button className='soundBtn' onClick={() => setPlaySound(!playSound)}>
+          HORN
+        </button>
+        {playSound ? <audio src={soundFile} autoPlay /> : null}
+      </div>
     </div>
   );
 }
