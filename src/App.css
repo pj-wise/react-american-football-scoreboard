@@ -18,7 +18,13 @@
   display: flex;
   justify-content: space-around;
   place-items: center;
-  /* height: 20rem; */
+  /* height      : 20rem; */
+}
+
+.time {
+  margin-top: -2em;
+  display: flex;
+  flex-direction: row;
 }
 
 .home,
@@ -41,6 +47,15 @@
   background-color: #af750a;
 }
 
+.time_name {
+  text-transform: uppercase;
+  margin-left: 46%;
+}
+
+.soundBtn {
+  margin-left: 46%;
+}
+
 .home__name,
 .away__name,
 .down__title,
@@ -52,6 +67,7 @@
   padding: 2rem;
 }
 
+.quarter-time,
 .home__score,
 .away__score {
   font-family: "Ozone";
@@ -113,6 +129,7 @@
   justify-content: space-around;
 }
 
+.quarter-btn,
 .homeButtons__touchdown,
 .homeButtons__fieldGoal,
 .awayButtons__touchdown,
